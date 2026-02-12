@@ -1,8 +1,8 @@
 import sql from 'mssql';
 import axios from 'axios';
-import 'dotenv/config';
 import path from 'path';
 import fs from 'fs';
+import 'dotenv/config';
 
 const dbConfig = {
     user: process.env.DB_USER || 'root',

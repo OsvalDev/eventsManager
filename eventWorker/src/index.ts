@@ -1,6 +1,7 @@
 import cron from 'node-cron';
 // --- Cron Schedules ---
 import updateDimentions from './tasks/updateDimentions';
+import updateInventory from './tasks/updateInventory';
 
 /**
  *  Schedule format reference:
@@ -16,7 +17,7 @@ import updateDimentions from './tasks/updateDimentions';
 
 //Runs at 7:00 AM and 12:00 PM, Monday through Friday
 cron.schedule('0 7,12 * * 1-5', () => {
-  updateDimentions();
+  updateInventory();
 });
 
 //Runs at 12:30 AM, Monday
