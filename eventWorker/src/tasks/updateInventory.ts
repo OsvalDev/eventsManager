@@ -41,7 +41,7 @@ const task = async () => {
                   ,[DISPONIBLE]
                   ,[RESERVA]
                   ,[FISICO]
-            FROM [CTRLINVENT].[dbo].[CCVW_INVENMAYV3]
+            FROM CCVW_INVENMAYV3
         `);
 
         console.log(result.recordset);
