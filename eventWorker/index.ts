@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 // --- Cron Schedules ---
-import updateDimentions from './tasks/updateDimentions';
-import updateInventory from './tasks/updateInventory';
+import updateDimentions from './src/tasks/updateDimentions';
+import updateInventory from './src/tasks/updateInventory';
 
 /**
  *  Schedule format reference:
