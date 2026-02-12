@@ -1,8 +1,8 @@
 import sql from 'mssql';
 import axios from 'axios';
-import 'dotenv/config';
 import path from 'path';
 import fs from 'fs';
+import 'dotenv/config';
 
 const dbConfig = {
     user: process.env.DB_USER || 'root',
@@ -12,17 +12,6 @@ const dbConfig = {
     options: {
         encrypt: false,
     }
-};
-
-type Size = {
-    style: string;
-    size: string;
-    cup: string;
-};
-
-type Color = {
-    style: string;
-    color: string;
 };
 
 const task = async () => {
@@ -44,33 +33,39 @@ const task = async () => {
             FROM CCVW_INVENMAYV3
         `);
 
-        console.log(result.recordset);
+        //construct payload
+        const payload = result.recordset.map(item => {
+            return {
+                style: item.ESTILO,
+                size: item.TALLA,
+                color: item.COLOR,
+                cup: item.COPA,
+                available: item.DISPONIBLE,
+                reserved: item.RESERVA,
+                description: item.DESCRIPCION
+            };
+        }); 
 
         //send data to api
-        // const sizesResponse = await axios.post(
-        //     'http://localhost:3000/api/sizes',
-        //     { sizes: dataForSizes }
-        // );
-        // const colorsResponse = await axios.post(
-        //     'http://localhost:3000/api/colors',
-        //     { colors: dataForColors }
-        // );
+        const inventoryResponse = await axios.post(
+            'https://carnivaldevelop.ddns.net/stylesInformation/api/inventory',
+            { inventory: payload }
+        );
 
         //Construct log msg
-        // const endDate = new Date();
-        // const diffInSeconds = (endDate.getTime() - initialDate.getTime()) / 1000;
-        // let logMsg = `Start time: ${initialDate.toString()}\n`;
-        // logMsg += `End time: ${endDate.toString()}\n`;
-        // logMsg += sizesResponse.status === 200 ? `Sizes updated successfully\n` : `Sizes update failed\n`;
-        // logMsg += colorsResponse.status === 200 ? `Colors updated successfully\n` : `Colors update failed\n`;
-        // logMsg += `Total time: ${diffInSeconds} seconds\n`;
+        const endDate = new Date();
+        const diffInSeconds = (endDate.getTime() - initialDate.getTime()) / 1000;
+        let logMsg = `Start time: ${initialDate.toString()}\n`;
+        logMsg += `End time: ${endDate.toString()}\n`;
+        logMsg += inventoryResponse.status === 200 ? `Inventory updated successfully\n` : `Inventory update failed\n`;
+        logMsg += `Total time: ${diffInSeconds} seconds\n`;
 
-        //Update log file in folder ../logs/updateDimentions.txt
-        // const logPath = path.join(__dirname, '..', 'logs', 'updateDimentions.txt');
-        // fs.appendFileSync(logPath, logMsg);
+        //Update log file in folder ../logs/updateInventory.txt
+        const logPath = path.join(__dirname, '..', 'logs', 'updateInventory.txt');
+        fs.appendFileSync(logPath, logMsg);
     } catch (err) {
-        //Update log file in folder ../logs/updateDimentions.txt
-        const logPath = path.join(__dirname, '..', 'logs', 'updateDimentions.txt');
+        //Update log file in folder ../logs/updateInventory.txt
+        const logPath = path.join(__dirname, '..', 'logs', 'updateInventory.txt');
         fs.appendFileSync(logPath, `Date: ${new Date().toString()} ,Error: ${err}\n`);
     } finally {
         if (pool) {

@@ -83,11 +83,11 @@ const task = async () => {
 
         //send data to api
         const sizesResponse = await axios.post(
-            'http://localhost:3000/api/sizes',
+            'https://carnivaldevelop.ddns.net/stylesInformation/api/sizes',
             { sizes: dataForSizes }
         );
         const colorsResponse = await axios.post(
-            'http://localhost:3000/api/colors',
+            'https://carnivaldevelop.ddns.net/stylesInformation/api/colors',
             { colors: dataForColors }
         );
 
