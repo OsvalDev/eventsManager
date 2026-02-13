@@ -53,7 +53,7 @@ const task = async () => {
 
         //send data to api
         const inventoryResponse = await axios.post(
-            'https://carnivaldevelop.ddns.net/stylesInformation/api/inventory',
+            'https://carnivaldevelop.ddns.net/stylesInformation/api/inventory/fill',
             { inventory: payload }
         );
 
