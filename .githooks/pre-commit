@@ -1,0 +1,30 @@
+#!/bin/sh
+# Pre-commit hook for Carnival Job Runner
+# Ensures documentation health, absence of schedule drift, and TypeScript build validity
+
+echo "===================================================="
+echo " Running Pre-Commit Quality Gate"
+echo "===================================================="
+
+# 1. Spec and Schedule Drift Verification
+echo "1. Auditing specifications and drift..."
+npm run spec:verify
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "\033[31m[PRE-COMMIT BLOCKED] Documentation audit failed or drift detected!\033[0m"
+  echo "Please review the errors above and update corresponding spec nodes or code."
+  exit 1
+fi
+
+# 2. TypeScript Build Verification
+echo "2. Compiling TypeScript..."
+npm run build
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "\033[31m[PRE-COMMIT BLOCKED] TypeScript compilation failed!\033[0m"
+  echo "Fix compiler errors before committing."
+  exit 1
+fi
+
+echo "\033[32m✔ [PRE-COMMIT PASSED] All quality gates satisfied.\033[0m"
+exit 0

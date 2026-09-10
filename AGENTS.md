@@ -58,6 +58,19 @@ This script audits:
 ### Available Workspace Skills
 - **`doc-health`**: Run diagnostic checks on documentation integrity and detect schedule/schema drift.
 - **`sdd-workflow`**: Step-by-step procedural runbook for adding or modifying tasks following Spec-First principles.
+- **`scaffold-task`**: Scaffolds a new ETL worker, types, CLI, and spec node with automated registration (`npm run task:new <name>`).
+
+### Git Hooks & Conventional Commits
+All commits must follow the **Conventional Commits** specification:
+`<type>(<optional-scope>): <description>` (e.g. `feat(inventory): add warehouse filter`, `fix(scheduler): handle timeout`).
+Pre-commit and commit-msg hooks in `.githooks/` automatically verify this and run `npm run spec:verify` + `npm run build`.
+
+### SQL Safety Directives
+Always adhere to [`.agents/rules/sql-safety.md`](file:///home/osvaldev/Documents/carnival/job-runner/.agents/rules/sql-safety.md):
+- Strictly read-only ETL (never execute mutating queries against ERP databases).
+- Never use `SELECT *` (explicit column projection required).
+- Respect the 1,000 parameter chunk limit on SQL Server.
+- Always dispose connection pools in `finally` blocks.
 
 ---
 
@@ -66,6 +79,7 @@ This script audits:
 | Command | Purpose |
 | :--- | :--- |
 | `npm run spec:verify` | Audit documentation health and detect code/spec drift |
+| `npm run task:new <name>` | Scaffold a new task, spec node, and scheduler registration |
 | `npm run dev` | Run daemon in watch mode using `tsx` |
 | `npm run build` | Compile TypeScript to `dist/` |
 | `npm run start` | Run compiled daemon in production mode |

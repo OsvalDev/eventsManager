@@ -116,3 +116,28 @@ Before submitting changes, ensure the following checklist is completed:
 - [ ] `npm run spec:verify` passes with code `0`.
 - [ ] `npm run build` succeeds without compiler warnings or errors.
 - [ ] On-demand task CLI was executed and log verified in `logs/*.log`.
+- [ ] Commit message strictly adheres to the Conventional Commits specification.
+
+---
+
+## 5. Conventional Commits & Git Hooks Enforcement
+
+To guarantee commit history readability and automate release tagging, all commits must follow the **Conventional Commits** standard:
+
+```text
+<type>(<optional-scope>): <description>
+```
+
+### Allowed Types
+* `feat`: A new background ETL worker, endpoint, or feature.
+* `fix`: A bug fix or patch.
+* `docs`: Updates to documentation, spec nodes, or diagrams.
+* `refactor`: Code reorganization without functional changes.
+* `perf`: Performance optimizations (e.g. chunking improvements).
+* `test`: Adding or correcting tests or verification scripts.
+* `chore`: Maintenance, dependencies, or configuration changes.
+
+### Automated Git Hooks (`.githooks/`)
+* **`pre-commit`**: Automatically runs `npm run spec:verify` and `npm run build`. Rejects the commit if drift or compiler errors exist.
+* **`commit-msg`**: Validates the commit message format against the Conventional Commits regex. Rejects non-conforming messages.
+

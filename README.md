@@ -97,10 +97,20 @@ npm run spec:verify
 | `npm run restart:pm2` | Rebuild and restart PM2 process |
 | `npm run logs:pm2` | View live PM2 log stream |
 | `npm run spec:verify` | Run automated documentation health & drift audit |
+| `npm run task:new <name>` | Scaffold a new ETL task, spec node, and scheduler registration |
 | `npm run task:inventory`| Run Inventory task immediately |
 | `npm run task:dimensions`| Run Dimensions task immediately |
 | `npm run task:livedash` | Run LiveDash task immediately |
 | `npm run task:logbook`  | Run The Courier task immediately |
+
+---
+
+## 🔒 Git Hooks & Conventional Commits
+
+Pre-configured Git hooks in `.githooks/` ensure that every commit satisfies the project quality gates:
+* **Pre-commit**: Automatically runs `npm run spec:verify` and `npm run build`.
+* **Commit-msg**: Enforces [Conventional Commits](https://www.conventionalcommits.org) (e.g. `feat(inventory): ...`, `fix(db): ...`).
+* **Database Safety**: All code and queries must adhere to [`.agents/rules/sql-safety.md`](.agents/rules/sql-safety.md).
 
 ---
 

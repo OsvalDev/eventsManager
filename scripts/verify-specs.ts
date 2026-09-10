@@ -137,22 +137,18 @@ function checkScheduleDrift(): void {
 
   const schedulesContent = fs.readFileSync(schedulesPath, 'utf-8');
 
-  // Mapping between task file and job id
-  const taskToJobMap: Record<string, string> = {
-    'TASK-01-UPDATE-INVENTORY.md': 'update-inventory',
-    'TASK-02-UPDATE-DIMENSIONS.md': 'update-dimensions',
-    'TASK-03-LIVEDASH-PUSH.md': 'livedash-push',
-    'TASK-04-LOGBOOK-SYNC.md': 'logbook-sync',
-  };
-
   const tasksDir = path.join(DOCS_DIR, 'tasks');
+  if (!fs.existsSync(tasksDir)) {
+    logWarn('docs/tasks/ directory not found for drift verification.');
+    return;
+  }
 
-  for (const [taskFileName, jobId] of Object.entries(taskToJobMap)) {
+  const taskFiles = fs.readdirSync(tasksDir).filter((f) => f.startsWith('TASK-') && f.endsWith('.md'));
+
+  for (const taskFileName of taskFiles) {
     const taskFilePath = path.join(tasksDir, taskFileName);
-    if (!fs.existsSync(taskFilePath)) {
-      logWarn(`Task file ${taskFileName} not found for drift verification.`);
-      continue;
-    }
+    const slugMatch = taskFileName.match(/^TASK-\d+-(.+)\.md$/);
+    const jobId = slugMatch ? slugMatch[1].toLowerCase() : taskFileName.replace(/\.md$/, '').toLowerCase();
 
     const node = parseFrontmatter(taskFilePath);
     if (!node.schedule) {

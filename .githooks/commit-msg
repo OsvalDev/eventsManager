@@ -1,0 +1,55 @@
+#!/bin/sh
+# Commit-msg hook for Carnival Job Runner
+# Enforces Conventional Commits specification
+
+COMMIT_MSG_FILE="$1"
+FIRST_LINE=$(head -n 1 "$COMMIT_MSG_FILE")
+
+# Allow merge commits
+if echo "$FIRST_LINE" | grep -qE '^Merge branch '; then
+  exit 0
+fi
+
+# Regex for Conventional Commits
+# Formats:
+#   <type>: <description>
+#   <type>(<scope>): <description>
+#   <type>!: <description>
+#   <type>(<scope>)!: <description>
+CONVENTIONAL_PATTERN="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9_\.\-]+\))?!?: .{5,}$"
+
+if ! echo "$FIRST_LINE" | grep -qE "$CONVENTIONAL_PATTERN"; then
+  echo ""
+  echo "\033[31m====================================================\033[0m"
+  echo "\033[31m[COMMIT REJECTED] Non-compliant commit message!\033[0m"
+  echo "\033[31m====================================================\033[0m"
+  echo ""
+  echo "Your commit message:"
+  echo "  \033[33m\"$FIRST_LINE\"\033[0m"
+  echo ""
+  echo "All commits in this repository must follow the Conventional Commits specification:"
+  echo "  \033[32m<type>(<scope>): <description>\033[0m"
+  echo ""
+  echo "Allowed types:"
+  echo "  feat     - A new feature, task, or capability"
+  echo "  fix      - A bug fix or patch"
+  echo "  docs     - Documentation or spec changes only"
+  echo "  style    - Code style changes (formatting, missing semi-colons)"
+  echo "  refactor - Code changes that neither fix a bug nor add a feature"
+  echo "  perf     - Performance improvements"
+  echo "  test     - Adding or correcting tests"
+  echo "  build    - Changes affecting build system or external dependencies"
+  echo "  ci       - CI/CD or automation script changes"
+  echo "  chore    - Routine tasks, maintenance, or configuration"
+  echo "  revert   - Reverting a previous commit"
+  echo ""
+  echo "Valid examples:"
+  echo "  feat(inventory): add warehouse location filter to query"
+  echo "  fix(scheduler): handle connection timeout on worker startup"
+  echo "  docs(tasks): update TASK-01 extract contract for CCVW_INVENMAYV3"
+  echo "  chore: update npm dependencies"
+  echo ""
+  exit 1
+fi
+
+exit 0
