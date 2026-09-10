@@ -114,5 +114,13 @@ Pre-configured Git hooks in `.githooks/` ensure that every commit satisfies the 
 
 ---
 
-## 📄 License
-Internal software developed for **Carnival**. All rights reserved.
+## 🤖 AI Workspace Skills
+
+This repository includes specialized workspace skills for AI coding assistants (located in [`.agents/skills/`](.agents/skills)), loaded automatically during agent sessions:
+
+| Skill | Directory | Description |
+| :--- | :--- | :--- |
+| **`doc-health`** | [`.agents/skills/doc-health`](.agents/skills/doc-health/SKILL.md) | Audits documentation health, verifies physical code file existence, and detects schedule or schema drift against `schedules.ts`. |
+| **`sdd-workflow`** | [`.agents/skills/sdd-workflow`](.agents/skills/sdd-workflow/SKILL.md) | Step-by-step procedural runbook for modifying tasks or implementing new features adhering to the Spec-First methodology. |
+| **`scaffold-task`** | [`.agents/skills/scaffold-task`](.agents/skills/scaffold-task/SKILL.md) | Automatically scaffolds new ETL background workers, types, CLI runners, and spec nodes (`npm run task:new <name>`). |
+
